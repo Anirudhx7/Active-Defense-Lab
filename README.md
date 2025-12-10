@@ -26,19 +26,73 @@ I simulated a malware drop to test the automated response capabilities.
 
 ## 🛠️ Technical Implementation
 
-### 1. Infrastructure Engineering
-* **Hypervisor:** VirtualBox (Bridged Networking for Manager/Agent communication).
-* **Storage:** Manually resized Linux LVM partitions to accommodate Elastic Stack indexer requirements.
-* **Tuning:** Optimized JVM Heap memory for performance on resource-constrained VMs.
+### 1. The Intelligence Engine (Wazuh Manager)
+I configured the global `ossec.conf` to enable the VirusTotal integration. This allows the SIEM to enrich logs with external threat data.
 
-### 2. The Defense Logic
-**Endpoint Configuration (`ossec.conf`):**
-Configured real-time monitoring on critical directories to bypass standard polling intervals.
+```xml
+<integration>
+  <name>virustotal</name>
+  <api_key>HIDDEN_API_KEY</api_key>
+  <group>syscheck</group>
+  <alert_format>json</alert_format>
+</integration>
 
-**The "Kill Script" (Batch):**
+``` 
+
+### 2. The "Kill Script" (Python):
 A custom script that logs the incident for audit purposes before removing the threat.
-```bat
-@echo off
-set LOG_FILE="C:\Program Files (x86)\ossec-agent\active-response\active-responses.log"
-echo %date% %time% active-response: 'delete_malware' - Threat Neutralized >> %LOG_FILE%
-del /f /q "C:\Users\User\Desktop\FIM_TEST\malware.exe"
+Instead of a simple batch script, I wrote a Python script to parse the JSON alert from Wazuh, extract the filename, and execute a secure deletion. This was compiled to an .exe using PyInstaller to ensure stability on the Windows Agent.
+<br>
+- <a href="https://github.com/Anirudhx7/Active-Defense-Lab/blob/00277f6fa75201085b4087dcbcd61bb2e9ee66e4/Scripts/remove-threat.py">`remove-threat.py`</a>
+
+### 3. Endpoint Configuration
+The Windows Agent was configured to monitor the FIM_TEST directory in real-time to catch drive-by downloads.
+```xml
+<syscheck>
+  <directories realtime="yes">C:\Users\Windows10\FIM_TEST</directories>
+</syscheck>
+```
+
+## 🚧 Challenges & Troubleshooting
+JSON Parsing: The Wazuh Manager passes the alert data as a complex JSON object. Debugging the Python script to correctly extract the file path required analyzing the full alert payload.
+
+PyInstaller Pathing: Compiling the script to .exe caused issues with relative paths. I had to ensure the executable was in the specific active-response bin folder and added to the Agent's definition.
+
+API Latency: There is a slight delay between file creation and the API return. I tuned the response timeout to ensure the script didn't time out while waiting for the verdict.
+
+# 🧠 Learning Outcomes
+From this project I gained hands-on experience in:
+
+- **SOAR (Security Orchestration, Automation, and Response)** implementation.
+- **API Integration** (Connecting SIEM tools to external Threat Intelligence providers).
+- **Python Scripting** for security automation and JSON log parsing.
+- **Endpoint Security** configuration using Wazuh Agents (FIM).
+- **False Positive Management** and alert tuning in a live environment.
+- **Log Analysis** to troubleshoot communication between Manager and Agent.
+
+---
+
+# 📁 Repository Structure
+```text
+/scripts
+    remove-threat.py       # The source Python script for remediation
+    
+
+/configs
+    ossec-manager.conf     # VirusTotal integration block
+    ossec-agent-win.conf   # Windows FIM configuration block
+
+/images
+    01_Architecture.png
+    02_VirusTotal_Log.png
+    03_Active_Response_Demo.gif
+```
+
+---
+
+# 🏁 Final Notes
+This project bridges the gap between **detection** and **remediation**. By leveraging the VirusTotal API, I turned Wazuh from a passive tool into an active defense system capable of stopping threats the moment they touch the disk, significantly reducing MTTR (Mean Time to Respond).
+
+## 📬 Contact
+
+LinkedIn: <a href="https://www.linkedin.com/in/anirudh-mehandru/">linkedin.com/in/anirudh-mehandru </a>
