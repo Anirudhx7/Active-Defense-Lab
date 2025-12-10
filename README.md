@@ -1,13 +1,13 @@
-# Active Defense Lab: Automated Threat Neutralization 🛡️
+# Active Defense Lab: Automated Threat Neutralization🛡️
 
 ## 🚀 Project Overview
 Most SOCs rely on passive monitoring. I wanted to build a system that **fights back**.
 This project integrates **Splunk (SIEM)** and **Wazuh (EDR)** into a hybrid architecture that detects ransomware-like behavior and automatically neutralizes the threat in under 1 second.
 
 **Key Capabilities:**
-* **Hybrid Architecture:** Integrated Splunk Enterprise and Wazuh Manager for full-stack visibility.
-* **Real-Time FIM:** Configured File Integrity Monitoring to detect unauthorized file drops (`malware.exe`).
-* **Active Response:** Engineered an automated kill-chain that triggers a script to delete malicious files instantly.
+* **Cloud Threat Intelligence:** Real-time hash lookups against VirusTotal's database.
+* **Automated Remediation:** Zero-touch removal of malicious files using custom Python scripts.
+* **FIM (File Integrity Monitoring):** Real-time detection of filesystem changes on Windows/Linux.
 
 ## 🏗️ Architecture
 ![Architecture](01_Network_Architecture.jpg)
