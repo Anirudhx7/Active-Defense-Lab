@@ -109,12 +109,13 @@ From this project I gained hands-on experience in:
 ```text
 /scripts
     remove-threat.py       # The source Python script for remediation
+    remove-threat.exe
     
 
 /configs
     ossec-manager.conf     # VirusTotal integration block
     ossec-agent-win.conf   # Windows FIM configuration block
-
+    
 /images
     01_Architecture.png
     02_VirusTotal_Log.png
