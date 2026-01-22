@@ -1,5 +1,11 @@
 # Active Defense Lab: Automated Threat Neutralization🛡️
 
+![Python](https://img.shields.io/badge/Python-Automation-FFD43B?style=flat&logo=python&logoColor=darkgreen)
+![Splunk](https://img.shields.io/badge/Splunk-SIEM-000000?style=flat&logo=splunk&logoColor=white)
+![Wazuh](https://img.shields.io/badge/Wazuh-EDR-00A9E0?style=flat&logo=wazuh&logoColor=white)
+![VirusTotal](https://img.shields.io/badge/VirusTotal-Threat%20Intel-5A2D81?style=flat&logo=virustotal&logoColor=white)
+![Windows](https://img.shields.io/badge/Windows-Target-0078D6?style=flat&logo=windows&logoColor=white)
+![Linux](https://img.shields.io/badge/Linux-Target-FCC624?style=flat&logo=linux&logoColor=black)
 ## 🚀 Project Overview
 Most SOCs rely on passive monitoring. I wanted to build a system that **fights back**.
 This project integrates **Splunk (SIEM)** and **Wazuh (EDR)** into a hybrid architecture that detects ransomware-like behavior and automatically neutralizes the threat in under 1 second.
